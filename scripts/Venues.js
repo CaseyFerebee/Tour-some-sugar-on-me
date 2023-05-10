@@ -1,9 +1,8 @@
 import { getBands, getBookings, getVenues } from "./database.js"
 
 let theBands = getBands()
-let theVenues = getVenues()
 let theBookings = getBookings()
-
+let theVenues = getVenues()
 // function to find the bands
 const findBands = (booking, theBands) => {
     let bookingBand = null
@@ -17,37 +16,21 @@ const findBands = (booking, theBands) => {
     return bookingBand
 }
 
- // function to find the venues
-const findVenues= (booking, theVenues) => {
-    let bookingVenue = null
 
-    for (const venue of theVenues) {
-        if (venue.id === booking.venueId) {
-            bookingVenue = venue
-        }
-    }
+const findMessage = (click) => {
+    const matchingBands = [];
 
-    return bookingVenue
-}
-
- const findMessage = (venueId) => {
-   
-  let message = ``
     for (const booking of theBookings) {
-        if (booking.venueId === venueId) {
-        const band = findBands(booking, theBands)
-        //const venue = findVenues(booking, theVenues)
-            if(message !== "") {
-                message += ', ';
-            }
-            message += band.name
+        if (booking.venueId === click) {
+            const band = findBands(booking, theBands);
+            matchingBands.push(band.name);
         }
     }
 
-    if(message === "") {
-        return " No bands are playing at this venue";
+    if (matchingBands.length === 0) {
+        return 'No bands are playing at this venue.';
     } else {
-        return  `The following bands are playing at this venue: ${message}`
+        return `The following bands are playing at this venue: ${matchingBands.join(', ')}.`;
     }
 }
 
@@ -63,7 +46,7 @@ document.addEventListener(
             const venueId = parseInt(itemClicked.dataset.id)
 
             for (const venue of theVenues) {
-                if ( venue.id === venueId) {
+                if (venue.id === venueId) {
 
                     const theAlert = findMessage(venueId)
 
@@ -76,7 +59,7 @@ document.addEventListener(
 
 export const venue = () => {
     let html = "<ul>"
-   
+
 
     for (const venue of theVenues) {
         html += `<li data-type= "venue" data-id="${venue.id}">${venue.name}</li>`
@@ -87,4 +70,4 @@ export const venue = () => {
     return html
 }
 
- 
+
